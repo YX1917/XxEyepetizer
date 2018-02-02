@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tl="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.flyco.tablayout.SlidingTabLayout
+        android:id="@+id/stl_fragment_top"
+        android:layout_width="0dp"
+        android:layout_height="36dp"
+        tl:layout_constraintHorizontal_bias="0.501"
+        tl:layout_constraintLeft_toLeftOf="parent"
+        tl:layout_constraintRight_toRightOf="parent"
+        tl:layout_constraintTop_toTopOf="parent"
+        tl:tl_iconVisible="false"
+        tl:tl_indicator_color="#060606"
+        tl:tl_indicator_height="3dp"
+        tl:tl_indicator_width="12dp"
+        tl:tl_textsize="12sp"
+        tl:tl_textUnselectColor="#9e9b9b"
+        tl:tl_textSelectColor="#060606"
+        >
+
+    </com.flyco.tablayout.SlidingTabLayout>
+
+    <View
+        android:layout_width="0dp"
+        android:background="#e7e6e6"
+        android:layout_height="1dp"
+        android:layout_marginTop="4dp"
+        tl:layout_constraintTop_toBottomOf="@+id/stl_fragment_top"
+        android:id="@+id/view2"
+        android:layout_marginRight="0dp"
+        tl:layout_constraintRight_toRightOf="parent"
+        android:layout_marginLeft="0dp"
+        tl:layout_constraintLeft_toLeftOf="parent"/>
+
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp_fragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        tl:layout_constraintBottom_toBottomOf="parent"
+        tl:layout_constraintLeft_toLeftOf="parent"
+        tl:layout_constraintRight_toRightOf="parent"
+        tl:layout_constraintHorizontal_bias="0.0"
+        android:layout_marginTop="0dp"
+        tl:layout_constraintTop_toBottomOf="@+id/view2">
+
+    </android.support.v4.view.ViewPager>
+
+</android.support.constraint.ConstraintLayout>
