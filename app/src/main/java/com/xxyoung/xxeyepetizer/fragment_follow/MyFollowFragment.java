@@ -2,6 +2,7 @@ package com.xxyoung.xxeyepetizer.fragment_follow;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,11 @@ import android.view.ViewGroup;
 import com.xxyoung.xxeyepetizer.R;
 import com.xxyoung.xxeyepetizer.base.BaseFragment;
 import com.xxyoung.xxeyepetizer.bean.MyFollowBean;
+import com.xxyoung.xxeyepetizer.ui.recyclerview.CommonAdapter;
+import com.xxyoung.xxeyepetizer.ui.recyclerview.wrapper.LoadMoreWrapper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -24,6 +30,10 @@ public class MyFollowFragment extends BaseFragment implements MyFollowView {
     RecyclerView mRecycleFollow;
     Unbinder unbinder;
     private MyFollowPresenter mMyFollowPresenter;
+    private CommonAdapter<MyFollowBean.FollowListBean> mFollowListBeanCommonAdapter;
+    private LoadMoreWrapper mLoadMoreWrapper;
+    private List<MyFollowBean.FollowListBean> mAuthorListBeen = new ArrayList<>();
+    private int startId = 2;
 
     @Override
     protected int getContentViewLayoutID() {
@@ -40,10 +50,29 @@ public class MyFollowFragment extends BaseFragment implements MyFollowView {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mMyFollowPresenter= new MyFollowPresenter();
+        initRecycleView();
+        mMyFollowPresenter = new MyFollowPresenter();
         mMyFollowPresenter.attachView(this);
-        mMyFollowPresenter.getFollow("0","2");
+        mMyFollowPresenter.getFollow("0", "2");
     }
+
+    private void initRecycleView() {
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        mRecycleFollow.setLayoutManager(linearLayoutManager);
+        mFollowListBeanCommonAdapter = new MyFollowAdapter(getActivity(), R.layout.item_follow, mAuthorListBeen);
+        mLoadMoreWrapper = new LoadMoreWrapper(mFollowListBeanCommonAdapter);
+        mLoadMoreWrapper.setLoadMoreView(R.layout.default_loading_recycle);
+        mLoadMoreWrapper.setOnLoadMoreListener(new LoadMoreWrapper.OnLoadMoreListener() {
+            @Override
+            public void onLoadMoreRequested() {
+                mMyFollowPresenter.getFollow(String.valueOf(startId), "2");
+                startId = startId + 2;
+            }
+        });
+
+        mRecycleFollow.setAdapter(mLoadMoreWrapper);
+    }
+
 
     @Override
     public void onDestroyView() {
@@ -89,6 +118,10 @@ public class MyFollowFragment extends BaseFragment implements MyFollowView {
 
     @Override
     public void showFollowData(MyFollowBean myFollowBean) {
+        for (MyFollowBean.FollowListBean followListBean : myFollowBean.getFollowList()) {
+            mAuthorListBeen.add(followListBean);
+        }
+        mLoadMoreWrapper.notifyDataSetChanged();
 
     }
 }

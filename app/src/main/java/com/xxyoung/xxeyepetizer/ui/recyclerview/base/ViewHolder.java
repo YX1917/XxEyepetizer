@@ -7,6 +7,9 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PagerSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.text.util.Linkify;
 import android.util.SparseArray;
@@ -22,7 +25,10 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.xxyoung.xxeyepetizer.R;
+import com.xxyoung.xxeyepetizer.ui.recyclerview.CommonAdapter;
 import com.xxyoung.xxeyepetizer.utilcode.GlideCircleTransform;
+import com.xxyoung.xxeyepetizer.utilcode.util.ScreenUtils;
+import com.xxyoung.xxeyepetizer.utilcode.util.SizeUtils;
 
 
 public class ViewHolder extends RecyclerView.ViewHolder {
@@ -224,6 +230,19 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         Glide.with(mContext).load(uri).transform(new GlideCircleTransform(mContext)).error(R.drawable.loading_error).placeholder(R.drawable.loading).into(view);
         return this;
     }
+    public ViewHolder setMarginImg(int viewId, String uri) {
+        ImageView view = (ImageView) getView(viewId);
+//        int screenWidth = ScreenUtils.getScreenWidth();
+//        int screenHeight= ScreenUtils.getScreenHeight();
+//        LogUtils.e("screenWidth",screenWidth,SizeUtils.dp2px(8));
+//        LogUtils.e("screenHeight",screenHeight);
+//        ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
+//        layoutParams.width = screenWidth- SizeUtils.dp2px(16);
+//        layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+//        view.setLayoutParams(layoutParams);
+        Glide.with(mContext).load(uri).error(R.drawable.loading_error).placeholder(R.drawable.loading).into(view);
+        return this;
+    }
 
 
     /**
@@ -251,4 +270,26 @@ public class ViewHolder extends RecyclerView.ViewHolder {
     }
 
 
+    public void setAdapter(int viewId, CommonAdapter videoBeanCommonAdapter) {
+        RecyclerView view = (RecyclerView) getView(viewId);
+        LinearLayoutManager linearLayoutManager =new LinearLayoutManager(mContext);
+        PagerSnapHelper pagerSnapHelper = new PagerSnapHelper();
+        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        view.setLayoutManager(linearLayoutManager);
+        view.setOnFlingListener(null);
+        pagerSnapHelper.attachToRecyclerView(view);
+        view.setFocusableInTouchMode(false);
+        view.requestFocus();
+//        view.addItemDecoration(new GalleryItemDecoration(LinearLayoutManager.HORIZONTAL,16));
+        view.setAdapter(videoBeanCommonAdapter);
+    }
+
+    public void setLayoutParams(int viewId, int dp) {
+        CardView view = (CardView) getView(viewId);
+        int screenWidth = ScreenUtils.getScreenWidth();
+        ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
+        layoutParams.width = screenWidth- SizeUtils.dp2px(dp);
+        layoutParams.height = (int)((screenWidth- SizeUtils.dp2px(dp))*0.6);
+        view.setLayoutParams(layoutParams);
+    }
 }
